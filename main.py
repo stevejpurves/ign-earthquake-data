@@ -22,10 +22,9 @@ def update(days: int = 1):
   typer.echo(f"update with latest (1) days data")
   df = fetch_page(URL.format(days))
   last_df = pd.read_json('data.json')
-  all_df = pd.concat([df, last_df]).drop_duplicates(subset='Event').sort_values(by=['Date', 'UTC Time'])
+  all_df = df.append(last_df, ignore_index=True).drop_duplicates(subset='Event').sort_values(by=['Date', 'UTC time'])
   all_df.to_json('data.json')
   all_df.to_csv('data.csv', index=False)
-
 
 if __name__ == "__main__":
   app()
