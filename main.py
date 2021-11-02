@@ -11,7 +11,7 @@ def fetch_page(url: str):
   return df[0]
 
 @app.command()
-def build(days: int = 62):
+def build(days: int = 65):
   typer.echo(f"(re)building all data")
   df = fetch_page(URL.format(days))
   df.to_json('data.json')
