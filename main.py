@@ -1,30 +1,25 @@
 import typer
-import requests
 import pandas as pd
+from pathlib import Path
+from datetime import date
+
+from igndata import build, update as update_data
 
 app = typer.Typer()
-URL = 'https://www.ign.es/web/en/ign/portal/ultimos-terremotos/-/ultimos-terremotos/get10dias?_IGNGFSSismoSismicidadReciente_WAR_IGNGFSSismoSismicidadRecienteportlet_formDate=1635524945194&_IGNGFSSismoSismicidadReciente_WAR_IGNGFSSismoSismicidadRecienteportlet_dias={}';
 
-def fetch_page(url: str):
-  r = requests.get(url)
-  df = pd.read_html(r.text)
-  return df[0]
 
 @app.command()
-def build(days: int = 65):
-  typer.echo(f"(re)building all data")
-  df = fetch_page(URL.format(days))
-  df.to_json('data.json')
-  df.to_csv('data.csv', index=False)
+def rebuild():
+  start = date(2021,8,31)
+  typer.echo(f"rebuilding all data since {start}")
+  build(Path('.'), start)
 
 @app.command()
-def update(days: int = 1):
-  typer.echo(f"update with latest (1) days data")
-  df = fetch_page(URL.format(days))
-  last_df = pd.read_json('data.json')
-  all_df = df.append(last_df, ignore_index=True).drop_duplicates(subset='Event').sort_values(by=['Date', 'UTC time'])
-  all_df.to_json('data.json')
-  all_df.to_csv('data.csv', index=False)
+def update(
+  days: int = typer.Argument(help="Number of days of data to collect", default=1)
+  ):
+  typer.echo(f"update with latest {days} days data")
+  update_data(Path('./data.csv'), days)
 
 if __name__ == "__main__":
   app()
