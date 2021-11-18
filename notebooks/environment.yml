@@ -10,6 +10,7 @@ dependencies:
   - jupyterlab
   - scipy
   - seaborn
+  - altair
   - pip
   - pip:
       - -e ..
