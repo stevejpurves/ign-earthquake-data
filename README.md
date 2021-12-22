@@ -6,6 +6,8 @@ https://www.ign.es/web/en/ign/portal/ultimos-terremotos/-/ultimos-terremotos/
 
 Along with a script to pull or update the data with the latest day(s) entries.
 
+An example project with a draft paper, notebooks, figures and interactive plots is [on Curvenote here](https://curvenote.com/@stevejpurves/la-palma-earthquakes).
+
 ## Purpose
 
 This dataset has been collected here to make it easier to access data relating to the (ongoing) seismic and volcanic crisis on La Palma, Islas Canarias. 🌋
