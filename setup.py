@@ -6,4 +6,9 @@ setuptools.setup(
     description="IGN volcano data collecton",
     packages=setuptools.find_packages(),
     python_requires='>=3.7',
+    install_requires=[
+        "requests",
+        "typer",
+        "pandas",
+    ],
 )
