@@ -1,0 +1,9 @@
+{
+"type": "FeatureCollection",
+"features": [
+{ "type": "Feature", "properties": { "obj_type": "Image Footprint", "or_src_id": 1 }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -18.010510, 28.865661 ], [ -17.712139, 28.866103 ], [ -17.714346, 28.450325 ], [ -18.008745, 28.452974 ], [ -18.010510, 28.865661 ] ] ] } }
+,
+{ "type": "Feature", "properties": { "obj_type": "Image Footprint", "or_src_id": 2 }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -17.950121, 28.650137 ], [ -17.949913, 28.650245 ], [ -17.836305, 28.664446 ], [ -17.818749, 28.575316 ], [ -17.935138, 28.560240 ], [ -17.950121, 28.650137 ] ] ] } }
+
+]
+}

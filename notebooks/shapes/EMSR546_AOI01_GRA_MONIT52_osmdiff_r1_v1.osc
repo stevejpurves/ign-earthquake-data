@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='utf-8'?>
+<osmChange version="0.6" generator="e-Geos">
+  <create>
+    <node changeset="1" id="-1" lat="28.619494724" lon="-17.902245416" version="1" />
+    <node changeset="1" id="-2" lat="28.6203629090001" lon="-17.902459081" version="1" />
+    <node changeset="1" id="-3" lat="28.6211685540001" lon="-17.9026786269999" version="1" />
+    <node changeset="1" id="-4" lat="28.621174384" lon="-17.902680216" version="1" />
+    <way changeset="1" id="-5" version="1">
+      <nd ref="-1" />
+      <nd ref="-2" />
+      <nd ref="-3" />
+      <nd ref="-4" />
+      <tag k="highway" v="service" />
+    </way>
+  </create>
+  <create>
+    <node changeset="1" id="-6" lat="28.619048655" lon="-17.901991171" version="1" />
+    <node changeset="1" id="-7" lat="28.6190495910001" lon="-17.9019916359999" version="1" />
+    <way changeset="1" id="-8" version="1">
+      <nd ref="-6" />
+      <nd ref="-7" />
+      <tag k="highway" v="service" />
+    </way>
+  </create>
+  <create>
+    <node changeset="1" id="-9" lat="28.618091318" lon="-17.9009901229999" version="1" />
+    <node changeset="1" id="-10" lat="28.618100928" lon="-17.9010985749999" version="1" />
+    <node changeset="1" id="-11" lat="28.618152858" lon="-17.901181145" version="1" />
+    <node changeset="1" id="-12" lat="28.6183772790001" lon="-17.9012887439999" version="1" />
+    <node changeset="1" id="-13" lat="28.6185609730001" lon="-17.9013478919999" version="1" />
+    <node changeset="1" id="-14" lat="28.618563082" lon="-17.901424408" version="1" />
+    <node changeset="1" id="-15" lat="28.6185579560001" lon="-17.901429311" version="1" />
+    <node changeset="1" id="-16" lat="28.6185348560001" lon="-17.9016720979999" version="1" />
+    <node changeset="1" id="-17" lat="28.618584383" lon="-17.901727555" version="1" />
+    <node changeset="1" id="-18" lat="28.61858698" lon="-17.90172767" version="1" />
+    <node changeset="1" id="-19" lat="28.6187295840001" lon="-17.901832616" version="1" />
+    <node changeset="1" id="-20" lat="28.618955069" lon="-17.901944665" version="1" />
+    <way changeset="1" id="-21" version="1">
+      <nd ref="-9" />
+      <nd ref="-10" />
+      <nd ref="-11" />
+      <nd ref="-12" />
+      <nd ref="-13" />
+      <nd ref="-14" />
+      <nd ref="-15" />
+      <nd ref="-16" />
+      <nd ref="-17" />
+      <nd ref="-18" />
+      <nd ref="-19" />
+      <nd ref="-20" />
+      <tag k="highway" v="service" />
+    </way>
+  </create>
+  <create>
+    <node changeset="1" id="-22" lat="28.618955069" lon="-17.901944665" version="1" />
+    <node changeset="1" id="-23" lat="28.6189566140001" lon="-17.901945433" version="1" />
+    <way changeset="1" id="-24" version="1">
+      <nd ref="-22" />
+      <nd ref="-23" />
+      <tag k="highway" v="service" />
+    </way>
+  </create>
+  <create>
+    <node changeset="1" id="-25" lat="28.6189566140001" lon="-17.901945433" version="1" />
+    <node changeset="1" id="-26" lat="28.619048655" lon="-17.901991171" version="1" />
+    <way changeset="1" id="-27" version="1">
+      <nd ref="-25" />
+      <nd ref="-26" />
+      <tag k="highway" v="service" />
+    </way>
+  </create>
+  <create>
+    <node changeset="1" id="-28" lat="28.6190495910001" lon="-17.9019916359999" version="1" />
+    <node changeset="1" id="-29" lat="28.6190897050001" lon="-17.90201157" version="1" />
+    <node changeset="1" id="-30" lat="28.619342058" lon="-17.902207844" version="1" />
+    <node changeset="1" id="-31" lat="28.6194065120001" lon="-17.902223706" version="1" />
+    <way changeset="1" id="-32" version="1">
+      <nd ref="-28" />
+      <nd ref="-29" />
+      <nd ref="-30" />
+      <nd ref="-31" />
+      <tag k="highway" v="service" />
+    </way>
+  </create>
+  <create>
+    <node changeset="1" id="-33" lat="28.6194065120001" lon="-17.902223706" version="1" />
+    <node changeset="1" id="-34" lat="28.619494724" lon="-17.902245416" version="1" />
+    <way changeset="1" id="-35" version="1">
+      <nd ref="-33" />
+      <nd ref="-34" />
+      <tag k="highway" v="service" />
+    </way>
+  </create>
+</osmChange>

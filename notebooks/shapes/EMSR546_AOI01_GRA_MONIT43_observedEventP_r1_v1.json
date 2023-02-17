@@ -1,0 +1,23 @@
+{
+"type": "FeatureCollection",
+"features": [
+{ "type": "Feature", "properties": { "event_type": "2-Volcanic Activity", "obj_desc": "Vent", "det_method": "Photo-interpretation", "notation": "Not Applicable", "dmg_src_id": 40, "thick_mm": 0.000000 }, "geometry": { "type": "Point", "coordinates": [ -17.864527, 28.612911 ] } }
+,
+{ "type": "Feature", "properties": { "event_type": "2-Volcanic Activity", "obj_desc": "Vent", "det_method": "Photo-interpretation", "notation": "Not Applicable", "dmg_src_id": 40, "thick_mm": 0.000000 }, "geometry": { "type": "Point", "coordinates": [ -17.864865, 28.613284 ] } }
+,
+{ "type": "Feature", "properties": { "event_type": "2-Volcanic Activity", "obj_desc": "Vent", "det_method": "Photo-interpretation", "notation": "Not Applicable", "dmg_src_id": 40, "thick_mm": 0.000000 }, "geometry": { "type": "Point", "coordinates": [ -17.865597, 28.612654 ] } }
+,
+{ "type": "Feature", "properties": { "event_type": "2-Volcanic Activity", "obj_desc": "Vent", "det_method": "Photo-interpretation", "notation": "Not Applicable", "dmg_src_id": 40, "thick_mm": 0.000000 }, "geometry": { "type": "Point", "coordinates": [ -17.870987, 28.616021 ] } }
+,
+{ "type": "Feature", "properties": { "event_type": "2-Volcanic Activity", "obj_desc": "Vent", "det_method": "Photo-interpretation", "notation": "Not Applicable", "dmg_src_id": 40, "thick_mm": 0.000000 }, "geometry": { "type": "Point", "coordinates": [ -17.869238, 28.614415 ] } }
+,
+{ "type": "Feature", "properties": { "event_type": "2-Volcanic Activity", "obj_desc": "Vent", "det_method": "Photo-interpretation", "notation": "Not Applicable", "dmg_src_id": 40, "thick_mm": 0.000000 }, "geometry": { "type": "Point", "coordinates": [ -17.870511, 28.615438 ] } }
+,
+{ "type": "Feature", "properties": { "event_type": "2-Volcanic Activity", "obj_desc": "Vent", "det_method": "Photo-interpretation", "notation": "Not Applicable", "dmg_src_id": 40, "thick_mm": 0.000000 }, "geometry": { "type": "Point", "coordinates": [ -17.866442, 28.613606 ] } }
+,
+{ "type": "Feature", "properties": { "event_type": "2-Volcanic Activity", "obj_desc": "Vent", "det_method": "Photo-interpretation", "notation": "Not Applicable", "dmg_src_id": 40, "thick_mm": 0.000000 }, "geometry": { "type": "Point", "coordinates": [ -17.867084, 28.613677 ] } }
+,
+{ "type": "Feature", "properties": { "event_type": "2-Volcanic Activity", "obj_desc": "Vent", "det_method": "Photo-interpretation", "notation": "Not Applicable", "dmg_src_id": 40, "thick_mm": 0.000000 }, "geometry": { "type": "Point", "coordinates": [ -17.868215, 28.613856 ] } }
+
+]
+}

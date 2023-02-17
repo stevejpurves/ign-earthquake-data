@@ -1,0 +1,19 @@
+{
+"type": "FeatureCollection",
+"features": [
+{ "type": "Feature", "properties": { "event_type": "2-Volcanic Activity", "obj_desc": "Vent", "det_method": "Photo-interpretation", "notation": "Not Applicable", "dmg_src_id": 5, "thick_mm": 0.000000 }, "geometry": { "type": "Point", "coordinates": [ -17.869331, 28.615763 ] } }
+,
+{ "type": "Feature", "properties": { "event_type": "2-Volcanic Activity", "obj_desc": "Vent", "det_method": "Photo-interpretation", "notation": "Not Applicable", "dmg_src_id": 3, "thick_mm": 0.000000 }, "geometry": { "type": "Point", "coordinates": [ -17.868765, 28.615600 ] } }
+,
+{ "type": "Feature", "properties": { "event_type": "2-Volcanic Activity", "obj_desc": "Vent", "det_method": "Photo-interpretation", "notation": "Not Applicable", "dmg_src_id": 5, "thick_mm": 0.000000 }, "geometry": { "type": "Point", "coordinates": [ -17.866952, 28.614371 ] } }
+,
+{ "type": "Feature", "properties": { "event_type": "2-Volcanic Activity", "obj_desc": "Vent", "det_method": "Photo-interpretation", "notation": "Not Applicable", "dmg_src_id": 5, "thick_mm": 0.000000 }, "geometry": { "type": "Point", "coordinates": [ -17.867568, 28.614778 ] } }
+,
+{ "type": "Feature", "properties": { "event_type": "2-Volcanic Activity", "obj_desc": "Vent", "det_method": "Photo-interpretation", "notation": "Not Applicable", "dmg_src_id": 5, "thick_mm": 0.000000 }, "geometry": { "type": "Point", "coordinates": [ -17.871323, 28.619372 ] } }
+,
+{ "type": "Feature", "properties": { "event_type": "2-Volcanic Activity", "obj_desc": "Vent", "det_method": "Photo-interpretation", "notation": "Not Applicable", "dmg_src_id": 5, "thick_mm": 0.000000 }, "geometry": { "type": "Point", "coordinates": [ -17.872349, 28.616720 ] } }
+,
+{ "type": "Feature", "properties": { "event_type": "2-Volcanic Activity", "obj_desc": "Vent", "det_method": "Photo-interpretation", "notation": "Not Applicable", "dmg_src_id": 5, "thick_mm": 0.000000 }, "geometry": { "type": "Point", "coordinates": [ -17.869874, 28.616568 ] } }
+
+]
+}

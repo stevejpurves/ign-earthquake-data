@@ -1,0 +1,7 @@
+{
+"type": "FeatureCollection",
+"features": [
+{ "type": "Feature", "properties": { "event_type": "2-Volcanic Activity", "obj_desc": "Lava flow", "det_method": "Photo-interpretation", "notation": "Not Applicable", "dmg_src_id": 3 }, "geometry": { "type": "Point", "coordinates": [ -17.869712, 28.615787 ] } }
+
+]
+}

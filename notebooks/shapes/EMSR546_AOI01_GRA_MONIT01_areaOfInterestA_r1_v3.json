@@ -1,0 +1,7 @@
+{
+"type": "FeatureCollection",
+"features": [
+{ "type": "Feature", "properties": { "emsr_id": "EMSR546", "glide_no": "Not Applicable", "area_id": "01", "locality": "La Palma", "map_type": "Grading-Monit01" }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -17.818749, 28.575316 ], [ -17.935138, 28.560240 ], [ -17.950121, 28.650137 ], [ -17.836305, 28.664446 ], [ -17.832656, 28.644786 ], [ -17.827183, 28.630626 ], [ -17.818749, 28.575316 ] ] ] } }
+
+]
+}

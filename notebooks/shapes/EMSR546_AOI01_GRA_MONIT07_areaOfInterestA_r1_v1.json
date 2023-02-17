@@ -1,0 +1,8 @@
+{
+"type": "FeatureCollection",
+"name": "EMSR546_AOI01_GRA_MONIT07_areaOfInterestA_r1_v1",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "emsr_id": "EMSR546", "glide_no": "Not Applicable", "area_id": "01", "locality": "La Palma", "map_type": "Grading-Monit07" }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -17.834093303999964, 28.589255278000053 ], [ -17.913509045999945, 28.581406959000049 ], [ -17.929335593999951, 28.595006350000062 ], [ -17.929096946999948, 28.605894247000037 ], [ -17.941386564999959, 28.635412087000077 ], [ -17.916515887999935, 28.653592271000036 ], [ -17.836305349999975, 28.664446099000031 ], [ -17.832656415999963, 28.644786415000056 ], [ -17.834093303999964, 28.589255278000053 ] ] ] } }
+]
+}

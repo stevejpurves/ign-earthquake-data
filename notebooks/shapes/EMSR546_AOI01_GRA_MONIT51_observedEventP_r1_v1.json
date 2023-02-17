@@ -1,0 +1,15 @@
+{
+"type": "FeatureCollection",
+"name": "EMSR546_AOI01_GRA_MONIT51_observedEventP_r1_v1",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "event_type": "2-Volcanic Activity", "obj_desc": "Vent", "det_method": "Photo-interpretation", "notation": "Not Applicable", "dmg_src_id": 50, "thick_mm": 0.0 }, "geometry": { "type": "Point", "coordinates": [ -17.864526923999961, 28.612911349000058 ] } },
+{ "type": "Feature", "properties": { "event_type": "2-Volcanic Activity", "obj_desc": "Vent", "det_method": "Photo-interpretation", "notation": "Not Applicable", "dmg_src_id": 50, "thick_mm": 0.0 }, "geometry": { "type": "Point", "coordinates": [ -17.864864616999967, 28.613283976000048 ] } },
+{ "type": "Feature", "properties": { "event_type": "2-Volcanic Activity", "obj_desc": "Vent", "det_method": "Photo-interpretation", "notation": "Not Applicable", "dmg_src_id": 50, "thick_mm": 0.0 }, "geometry": { "type": "Point", "coordinates": [ -17.865458681999939, 28.612675931000069 ] } },
+{ "type": "Feature", "properties": { "event_type": "2-Volcanic Activity", "obj_desc": "Vent", "det_method": "Photo-interpretation", "notation": "Not Applicable", "dmg_src_id": 50, "thick_mm": 0.0 }, "geometry": { "type": "Point", "coordinates": [ -17.866108783999948, 28.613603190000049 ] } },
+{ "type": "Feature", "properties": { "event_type": "2-Volcanic Activity", "obj_desc": "Vent", "det_method": "Photo-interpretation", "notation": "Not Applicable", "dmg_src_id": 50, "thick_mm": 0.0 }, "geometry": { "type": "Point", "coordinates": [ -17.867068894999932, 28.614597192000076 ] } },
+{ "type": "Feature", "properties": { "event_type": "2-Volcanic Activity", "obj_desc": "Vent", "det_method": "Photo-interpretation", "notation": "Not Applicable", "dmg_src_id": 50, "thick_mm": 0.0 }, "geometry": { "type": "Point", "coordinates": [ -17.868321123999976, 28.615143475000025 ] } },
+{ "type": "Feature", "properties": { "event_type": "2-Volcanic Activity", "obj_desc": "Vent", "det_method": "Photo-interpretation", "notation": "Not Applicable", "dmg_src_id": 50, "thick_mm": 0.0 }, "geometry": { "type": "Point", "coordinates": [ -17.87014389199993, 28.616280281000058 ] } },
+{ "type": "Feature", "properties": { "event_type": "2-Volcanic Activity", "obj_desc": "Vent", "det_method": "Photo-interpretation", "notation": "Not Applicable", "dmg_src_id": 50, "thick_mm": 0.0 }, "geometry": { "type": "Point", "coordinates": [ -17.866542132999939, 28.613874450000026 ] } }
+]
+}

@@ -1,0 +1,7 @@
+{
+"type": "FeatureCollection",
+"features": [
+{ "type": "Feature", "properties": { "obj_type": "213-Airfield", "name": "Aeropuerto de La Palma", "info": "2130-Airfield runways", "damage_gra": "Not Analysed", "det_method": "Not Applicable", "notation": "Not Applicable", "or_src_id": 997, "dmg_src_id": 997, "cd_value": "Not Applicable" }, "geometry": { "type": "Point", "coordinates": [ -17.754896, 28.622780 ] } }
+
+]
+}
