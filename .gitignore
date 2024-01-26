@@ -2,4 +2,4 @@ env/
 .ipynb_checkpoints/
 __pycache__/
 igndata.egg-info/
-build/
+_build/

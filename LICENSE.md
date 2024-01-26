@@ -1,4 +1,8 @@
-# Regarding Sofware
+---
+title: Licence Info
+---
+
+## Regarding Software
 
 Copyright 2021 Steve Purves
 
@@ -8,6 +12,6 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-# Regarding Data
+## Regarding Data
 
 Data is taken from the IGN website under Spanish `Re-use of Public Sector Information (RISP)` rules which allow distribution under the same conditions. See https://www.ign.es/web/en/ign/portal/info-aviso-legal for more details.
