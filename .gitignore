@@ -1,5 +1,2 @@
-env/
-.ipynb_checkpoints/
-__pycache__/
-igndata.egg-info/
-_build/
+.DS_Store
+node_modules/
