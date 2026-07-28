@@ -1,0 +1,44 @@
+{
+  "name": "ign-earthquake-timeline",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "react-router build",
+    "dev": "react-router dev",
+    "start": "react-router-serve ./build/server/index.js",
+    "typecheck": "react-router typegen && tsc",
+    "db:up": "docker compose up -d",
+    "db:migrate": "prisma migrate dev",
+    "db:setup": "prisma migrate deploy && prisma db seed",
+    "db:seed": "prisma db seed",
+    "postinstall": "prisma generate",
+    "test": "tsx --test tests/*.test.ts"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.9.1",
+    "@prisma/client": "^7.9.1",
+    "@react-router/node": "^8",
+    "@react-router/serve": "^8",
+    "dotenv": "^17.4.2",
+    "isbot": "^5.1.36",
+    "node-html-parser": "^9.0.0",
+    "prisma": "^7.9.1",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "react-router": "^8"
+  },
+  "devDependencies": {
+    "@react-router/dev": "^8",
+    "@tailwindcss/vite": "^4.2.2",
+    "@types/node": "^22",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "tailwindcss": "^4.2.2",
+    "tsx": "^4.23.1",
+    "typescript": "^5.9.3",
+    "vite": "^8.0.3"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  }
+}

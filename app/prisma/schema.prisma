@@ -1,0 +1,35 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Earthquake {
+  // IGN event id, e.g. "es2022cibon"
+  id           String   @id
+  time         DateTime // event origin time (UTC)
+  latitude     Float
+  longitude    Float
+  depthKm      Float?
+  magnitude    Float?
+  magType      String?
+  maxIntensity String?
+  region       String?
+  createdAt    DateTime @default(now())
+
+  @@index([time])
+}
+
+model RefreshLog {
+  id             Int       @id @default(autoincrement())
+  startedAt      DateTime  @default(now())
+  finishedAt     DateTime?
+  status         String // "running" | "success" | "error"
+  eventsUpserted Int       @default(0)
+  message        String?
+
+  @@index([status, finishedAt])
+}
