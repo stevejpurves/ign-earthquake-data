@@ -278,7 +278,8 @@ export function TimelineChart({ points }: { points: QuakePoint[] }) {
   if (points.length === 0) {
     return (
       <div className="flex h-64 items-center justify-center rounded-lg border border-black/10 text-sm text-[#898781] dark:border-white/10">
-        No events in the database yet — run <code className="mx-1">npm run db:setup</code> to seed it.
+        No events in the database yet — the first IGN refresh will populate it,
+        or run <code className="mx-1">npm run db:seed</code>.
       </div>
     );
   }

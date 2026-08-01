@@ -4,7 +4,7 @@ Earthquake data from Spain's [Instituto Geográfico Nacional (IGN)](https://www.
 
 ## Layout
 
-- [`app/`](app/) — React Router web app: an earthquake timeline visualization (depth vs. time, marker size = magnitude) backed by Postgres + Prisma. Auto-refreshes its database from the IGN feed in the background. See [`app/README.md`](app/README.md) for setup.
+- [`app/`](app/) — React Router web app: an earthquake timeline visualization for the region around Tenerife (depth vs. time, marker size = magnitude) backed by Postgres + Prisma. Loads events from the IGN feed from 1 Jul 2026 and auto-refreshes in the background. See [`app/README.md`](app/README.md) for setup.
 - [`data/`](data/) — the original data project: CSV/JSON catalog snapshots, Python fetch/update scripts, and analysis notebooks. See [`data/README.md`](data/README.md).
 
 ## Quick start (web app)
@@ -13,7 +13,7 @@ Earthquake data from Spain's [Instituto Geográfico Nacional (IGN)](https://www.
 cd app
 docker compose up -d      # local Postgres
 npm install
-npm run db:setup          # migrate + seed from ../data/data.csv
+npm run db:setup          # migrate + initial IGN load
 npm run dev
 ```
 

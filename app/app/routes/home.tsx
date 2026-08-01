@@ -1,6 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useFetcher, useRevalidator } from "react-router";
 import type { Route } from "./+types/home";
+import {
+  INITIAL_LOAD_FROM,
+  REGION_BBOX,
+  REGION_NAME,
+} from "../lib/config.server";
 import { prisma } from "../lib/db.server";
 import { getLastSuccessfulRefresh, isStale } from "../lib/refresh.server";
 import { TimelineChart, type QuakePoint } from "../components/TimelineChart";
@@ -19,6 +24,11 @@ export function meta(_: Route.MetaArgs) {
 export async function loader(_: Route.LoaderArgs) {
   const [rows, lastRefresh, stale] = await Promise.all([
     prisma.earthquake.findMany({
+      where: {
+        time: { gte: INITIAL_LOAD_FROM },
+        latitude: { gte: REGION_BBOX.latMin, lte: REGION_BBOX.latMax },
+        longitude: { gte: REGION_BBOX.lonMin, lte: REGION_BBOX.lonMax },
+      },
       orderBy: { time: "asc" },
       select: {
         id: true,
@@ -44,6 +54,8 @@ export async function loader(_: Route.LoaderArgs) {
     ),
     lastRefreshedAt: lastRefresh?.finishedAt?.getTime() ?? null,
     stale,
+    regionName: REGION_NAME,
+    fromDate: INITIAL_LOAD_FROM.getTime(),
   };
 }
 
@@ -57,7 +69,7 @@ const RANGES = [
 type RangeKey = (typeof RANGES)[number]["key"];
 
 export default function Home({ loaderData }: Route.ComponentProps) {
-  const { points, lastRefreshedAt, stale } = loaderData;
+  const { points, lastRefreshedAt, stale, regionName, fromDate } = loaderData;
   const fetcher = useFetcher<{
     status: "fresh" | "already-running" | "refreshed" | "error";
     eventsUpserted?: number;
@@ -107,11 +119,18 @@ export default function Home({ loaderData }: Route.ComponentProps) {
       <header className="mb-6 flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="text-xl font-semibold text-[#0b0b0b] dark:text-white">
-            Earthquake timeline — depth over time
+            {regionName} earthquake timeline — depth over time
           </h1>
           <p className="mt-1 text-sm text-[#52514e] dark:text-[#c3c2b7]">
-            Events from the IGN (Instituto Geográfico Nacional) catalog. Depth
-            in km plotted downward; marker size shows magnitude.
+            IGN (Instituto Geográfico Nacional) events around {regionName}{" "}
+            since{" "}
+            {new Intl.DateTimeFormat("en-GB", {
+              day: "numeric",
+              month: "short",
+              year: "numeric",
+              timeZone: "UTC",
+            }).format(fromDate)}
+            . Depth in km plotted downward; marker size shows magnitude.
           </p>
         </div>
         <div className="flex items-center gap-2 text-xs text-[#898781]">

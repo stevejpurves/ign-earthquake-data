@@ -93,8 +93,22 @@ export function parseIgnTable(html: string): IgnEvent[] {
   return events;
 }
 
+export function inBbox(
+  e: { latitude: number; longitude: number },
+  bbox: { latMin: number; latMax: number; lonMin: number; lonMax: number },
+): boolean {
+  return (
+    e.latitude >= bbox.latMin &&
+    e.latitude <= bbox.latMax &&
+    e.longitude >= bbox.lonMin &&
+    e.longitude <= bbox.lonMax
+  );
+}
+
+// The feed accepts arbitrary day windows (the original dataset in ../data was
+// built with multi-month requests); the clamp is just a sanity bound.
 export async function fetchIgnEvents(days: number): Promise<IgnEvent[]> {
-  const clamped = Math.min(30, Math.max(1, Math.round(days)));
+  const clamped = Math.min(400, Math.max(1, Math.round(days)));
   const res = await fetch(FEED_URL(clamped), {
     headers: { "User-Agent": "ign-earthquake-data-app/1.0" },
     signal: AbortSignal.timeout(30_000),
