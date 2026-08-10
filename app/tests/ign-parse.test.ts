@@ -73,3 +73,33 @@ test("parses the Spanish header variant with comma decimals", () => {
 test("throws when no table is present", () => {
   assert.throws(() => parseIgnTable("<html><body>maintenance</body></html>"));
 });
+
+// Mirrors the real feed markup: full Liferay page, unclosed <tr> tags,
+// INFO links inside header cells, &nbsp; for empty cells.
+const LIVE_STYLE_FEED = `
+<!DOCTYPE html> <html class="aui ltr"><head><title>Latest earthquakes</title></head>
+<body><div><p>seismic analysis. </p></div> <div class="w90 mcenter tar fr"> </div>
+<table> <tr> <th>Event</th> <th>Date</th> <th>UTC time</th>
+<th>Local time<br/><span style="font-size:9px;">(*)</span></th>
+<th>Latitude</th> <th>Longitude</th> <th>Depth&nbsp;(km)</th> <th>Magnitude</th>
+<th>Mag. type <a href="#"><img alt="INFO: Magnitude type"/></a></th>
+<th>Max. int <a href="#"><img alt="INFO: Intensity scale"/></a></th>
+<th>Region <a href="#"><img alt="INFO: Region"/></a></th> <th>More Info</th>
+<tr> <td>es2026pogdh</td> <td>10/08/2026</td> <td>04:53:53</td> <td>05:53:53</td>
+<td>28.2331</td> <td>-16.3681</td> <td>16.0</td> <td>1.6</td> <td>mbLg</td>
+<td>&nbsp;</td> <td>E FASNIA.ITF</td> <td><a href="#">+ info</a></td>
+<tr> <td>es2026pnrgf</td> <td>09/08/2026</td> <td>21:22:42</td> <td>22:22:42</td>
+<td>28.0908</td> <td>-16.2352</td> <td>8.0</td> <td>1.6</td> <td>mbLg</td>
+<td>&nbsp;</td> <td>ATL&Aacute;NTICO-CANARIAS</td> <td><a href="#">+ info</a></td>
+</table></body></html>`;
+
+test("parses live-style markup with unclosed rows and header decorations", () => {
+  const events = parseIgnTable(LIVE_STYLE_FEED);
+  assert.equal(events.length, 2);
+  assert.equal(events[0].id, "es2026pogdh");
+  assert.equal(events[0].time.toISOString(), "2026-08-10T04:53:53.000Z");
+  assert.equal(events[0].depthKm, 16.0);
+  assert.equal(events[0].maxIntensity, null);
+  assert.equal(events[0].region, "E FASNIA.ITF");
+  assert.equal(events[1].region, "ATLÁNTICO-CANARIAS");
+});

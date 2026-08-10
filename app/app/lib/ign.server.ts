@@ -1,5 +1,3 @@
-import { parse } from "node-html-parser";
-
 // The IGN "últimos terremotos" feed — the same catalog behind the
 // wms-inspire/geofisica WMS layers, served as an HTML table of recent events.
 // `dias` selects how many days back the feed covers (the portal offers up to 30).
@@ -39,17 +37,54 @@ function parseUtc(date: string, time: string): Date | null {
   return Number.isNaN(d.getTime()) ? null : d;
 }
 
-export function parseIgnTable(html: string): IgnEvent[] {
-  const root = parse(html);
-  const table = root.querySelector("table");
-  if (!table) throw new Error("No <table> found in IGN feed response");
+const NAMED_ENTITIES: Record<string, string> = {
+  nbsp: " ",
+  amp: "&",
+  lt: "<",
+  gt: ">",
+  quot: '"',
+  aacute: "á",
+  eacute: "é",
+  iacute: "í",
+  oacute: "ó",
+  uacute: "ú",
+  ntilde: "ñ",
+  Aacute: "Á",
+  Eacute: "É",
+  Iacute: "Í",
+  Oacute: "Ó",
+  Uacute: "Ú",
+  Ntilde: "Ñ",
+};
 
-  const rows = table.querySelectorAll("tr");
+function cellText(cellHtml: string): string {
+  return cellHtml
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(Number(n)))
+    .replace(/&(\w+);/g, (m, name) => NAMED_ENTITIES[name] ?? m)
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+// The feed's table rows are unclosed `<tr>` tags inside a messy Liferay page,
+// which trips up lenient DOM parsers (node-html-parser silently drops rows).
+// The markup is machine-generated and flat, so splitting on row/cell tags
+// directly is the reliable way to read it.
+export function parseIgnTable(html: string): IgnEvent[] {
+  const start = html.search(/<table[^>]*>/i);
+  if (start === -1) throw new Error("No <table> found in IGN feed response");
+  const end = html.indexOf("</table>", start);
+  const tableHtml = html.slice(start, end === -1 ? html.length : end);
+
+  const cellRe = /<t[hd][^>]*>([\s\S]*?)<\/t[hd]>/gi;
+  const rows = tableHtml
+    .split(/<tr[^>]*>/i)
+    .slice(1)
+    .map((chunk) => Array.from(chunk.matchAll(cellRe), (m) => cellText(m[1])))
+    .filter((cells) => cells.length > 0);
   if (rows.length < 2) return [];
 
-  const headers = rows[0]
-    .querySelectorAll("th, td")
-    .map((c) => c.text.trim().toLowerCase());
+  const headers = rows[0].map((h) => h.toLowerCase());
 
   const iEvent = findColumn(headers, ["event", "evento"]);
   const iDate = findColumn(headers, ["date", "fecha"]);
@@ -69,8 +104,7 @@ export function parseIgnTable(html: string): IgnEvent[] {
   }
 
   const events: IgnEvent[] = [];
-  for (const row of rows.slice(1)) {
-    const cells = row.querySelectorAll("td").map((c) => c.text.trim());
+  for (const cells of rows.slice(1)) {
     if (cells.length < headers.length - 1) continue;
     const id = cells[iEvent];
     const lat = toFloat(cells[iLat]);

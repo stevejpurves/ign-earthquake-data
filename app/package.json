@@ -21,7 +21,6 @@
     "@react-router/serve": "^8",
     "dotenv": "^17.4.2",
     "isbot": "^5.1.36",
-    "node-html-parser": "^9.0.0",
     "prisma": "^7.9.1",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
