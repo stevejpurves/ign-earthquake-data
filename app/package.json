@@ -12,7 +12,8 @@
     "db:setup": "prisma migrate deploy && prisma db seed",
     "db:seed": "prisma db seed",
     "postinstall": "prisma generate",
-    "test": "tsx --test tests/*.test.ts"
+    "test": "tsx --test tests/*.test.ts",
+    "db:backfill": "tsx prisma/backfill.ts"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.9.1",

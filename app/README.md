@@ -23,11 +23,15 @@ Postgres via Prisma.
 - Refreshes are throttled server-side (interval + a concurrency lock) and
   logged in the `RefreshLog` table; failures degrade gracefully to the
   stored data.
-- Events are restricted to a window starting **1 Jul 2026** and a bounding box
-  around **Tenerife** (island plus nearby offshore, including the Enmedio
-  seamount area). Both are configurable via `INITIAL_LOAD_FROM`,
+- Events are restricted to a bounding box around **Tenerife** (island plus
+  nearby offshore, including the Enmedio seamount area); the initial load
+  starts at **1 Jan 2025**. Both are configurable via `INITIAL_LOAD_FROM`,
   `REGION_BBOX`, and `REGION_NAME` in `.env` — see `.env.example` and
-  `app/lib/config.server.ts`.
+  `app/lib/config.server.ts`. Everything stored is shown, so backfilled
+  history appears automatically.
+- Two charts share the same time-range selection (presets or a custom
+  from/to date range): the depth-over-time scatter, and a stacked bar chart
+  of daily event counts bucketed by integer magnitude.
 
 ## Stack
 
@@ -63,8 +67,25 @@ the background.
 | `npm run db:migrate` | create/apply migrations in dev |
 | `npm run db:setup` | `migrate deploy` + initial IGN load |
 | `npm run db:seed` | initial IGN load (idempotent, skips duplicates) |
+| `npm run db:backfill` | backfill older history (see below) |
 | `npm test` | unit tests for the feed parser and region/window filters |
 | `npm run typecheck` | route typegen + `tsc` |
+
+## Backfilling older history
+
+The initial load starts at `INITIAL_LOAD_FROM` (default 1 Jan 2025). To reach
+further back at any time:
+
+```bash
+npm run db:backfill                        # fill INITIAL_LOAD_FROM → oldest stored event
+npm run db:backfill -- --from 2020-01-01   # reach further back
+npm run db:backfill -- --from 2020-01-01 --to 2022-06-30
+```
+
+Long ranges are fetched in ≤180-day chunks; inserts are deduplicated, so
+overlapping or repeated runs are safe. The app displays whatever is stored,
+so backfilled events show up on the next page load. Point `DATABASE_URL` at
+the production database (e.g. the Supabase session pooler) to backfill it.
 
 ## Deploying to Vercel + Supabase
 

@@ -136,6 +136,26 @@ export async function fetchCatalogEvents(
   return parseCatalogGeoJson(await res.text());
 }
 
+/**
+ * Split a date range into consecutive windows of at most `maxDays`, so long
+ * backfills become several modest catalog requests instead of one huge one.
+ */
+export function chunkDateRange(
+  start: Date,
+  end: Date,
+  maxDays = 180,
+): { start: Date; end: Date }[] {
+  const step = maxDays * 86_400_000;
+  const chunks: { start: Date; end: Date }[] = [];
+  for (let t = start.getTime(); t < end.getTime(); t += step) {
+    chunks.push({
+      start: new Date(t),
+      end: new Date(Math.min(t + step, end.getTime())),
+    });
+  }
+  return chunks.length > 0 ? chunks : [{ start, end }];
+}
+
 export function inBbox(
   e: { latitude: number; longitude: number },
   bbox: Bbox,

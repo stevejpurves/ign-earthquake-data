@@ -7,10 +7,10 @@ export interface Bbox {
   lonMax: number;
 }
 
-// The catalog window starts here: the initial load pulls IGN events from this
-// date, and the loader/refresh ignore anything earlier.
+// Where the initial load starts pulling IGN events from. Earlier history can
+// be added at any time with `npm run db:backfill` — everything stored is shown.
 export const INITIAL_LOAD_FROM: Date = (() => {
-  const raw = process.env.INITIAL_LOAD_FROM ?? "2026-07-01";
+  const raw = process.env.INITIAL_LOAD_FROM ?? "2025-01-01";
   const d = new Date(`${raw}T00:00:00Z`);
   if (Number.isNaN(d.getTime())) {
     throw new Error(`Invalid INITIAL_LOAD_FROM date: ${raw}`);

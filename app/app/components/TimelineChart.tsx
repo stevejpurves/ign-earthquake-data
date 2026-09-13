@@ -106,7 +106,14 @@ interface Hover {
   y: number;
 }
 
-export function TimelineChart({ points }: { points: QuakePoint[] }) {
+export function TimelineChart({
+  points,
+  xDomain,
+}: {
+  points: QuakePoint[];
+  /** Shared time scale (e.g. with the daily-count chart); falls back to the data extent. */
+  xDomain?: { tMin: number; tMax: number };
+}) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [size, setSize] = useState({ width: 0, height: 420 });
@@ -119,7 +126,7 @@ export function TimelineChart({ points }: { points: QuakePoint[] }) {
   );
 
   const domain = useMemo(() => {
-    if (plotted.length === 0) return null;
+    if (plotted.length === 0 && !xDomain) return null;
     let tMin = Infinity;
     let tMax = -Infinity;
     let dMax = 0;
@@ -128,12 +135,15 @@ export function TimelineChart({ points }: { points: QuakePoint[] }) {
       if (p.t > tMax) tMax = p.t;
       if (p.d! > dMax) dMax = p.d!;
     }
-    if (tMin === tMax) {
+    if (xDomain) {
+      tMin = xDomain.tMin;
+      tMax = xDomain.tMax;
+    } else if (tMin === tMax) {
       tMin -= 86_400_000;
       tMax += 86_400_000;
     }
-    return { tMin, tMax, dMin: 0, dMax: dMax * 1.05 || 1 };
-  }, [plotted]);
+    return { tMin, tMax, dMin: 0, dMax: dMax * 1.05 || 30 };
+  }, [plotted, xDomain]);
 
   // Track OS color scheme so the canvas repaints with the right theme.
   useEffect(() => {
@@ -275,7 +285,10 @@ export function TimelineChart({ points }: { points: QuakePoint[] }) {
     [scales, plotted],
   );
 
-  if (points.length === 0) {
+  // Without a shared domain there is nothing to draw axes from either —
+  // treat it as the true empty state. With one, an empty selection still
+  // renders the grid.
+  if (points.length === 0 && !xDomain) {
     return (
       <div className="flex h-64 items-center justify-center rounded-lg border border-black/10 text-sm text-[#898781] dark:border-white/10">
         No events in the database yet — the first IGN refresh will populate it,
