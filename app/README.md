@@ -63,6 +63,74 @@ the background.
 | `npm test` | unit tests for the feed parser and region/window filters |
 | `npm run typecheck` | route typegen + `tsc` |
 
+## Deploying to Vercel + Supabase
+
+The app is a standard React Router SSR app, so it deploys to Vercel with the
+database on Supabase Postgres.
+
+### 1. Create the Supabase database
+
+1. Create a project at [supabase.com](https://supabase.com) and note the
+   database password.
+2. In the dashboard, open **Connect** and copy the **Session pooler**
+   connection string (IPv4-friendly, works for both migrations and the app):
+
+   ```
+   postgresql://postgres.<project-ref>:<password>@aws-0-<region>.pooler.supabase.com:5432/postgres
+   ```
+
+### 2. Migrate and run the initial load (from your machine)
+
+```bash
+cd app
+DATABASE_URL="<session-pooler-url>" npm run db:setup
+```
+
+This applies the Prisma migrations and pulls the initial IGN load (since
+`INITIAL_LOAD_FROM`, Tenerife region) straight into Supabase. Re-running it is
+safe — the load skips duplicates.
+
+### 3. Deploy the app on Vercel
+
+1. Import the GitHub repository in Vercel.
+2. Set **Root Directory** to `app` (this is a monorepo). Vercel auto-detects
+   the React Router framework; the default build command (`npm run build`) is
+   correct, and `postinstall` regenerates the Prisma client during the build.
+3. Add the environment variable `DATABASE_URL` = the same session-pooler URL
+   (plus `INITIAL_LOAD_FROM` / `REGION_BBOX` / `REGION_NAME` if you want
+   non-default values).
+4. Deploy.
+
+### Notes
+
+- **Function duration**: the background refresh (`POST /api/refresh`) calls
+  the IGN feed with a 30 s timeout, so give functions headroom — set
+  **Settings → Functions → Max Duration** to 60 s (or add a `vercel.json`
+  with `{"functions": {"**": {"maxDuration": 60}}}`) if your plan defaults
+  lower.
+- **Refresh cadence**: refreshes are triggered by page views (throttled to
+  one per hour server-side). With zero traffic the data simply stays put
+  until the next visit — fine for this app. If you ever want unattended
+  updates, add a Vercel Cron job and a `loader` (GET) handler to
+  `app/routes/api.refresh.ts`, since cron invokes with GET.
+- **Connection pooling**: each serverless instance opens its own small pg
+  pool, which the session pooler absorbs at this app's scale. If you ever
+  see connection-limit errors under load, switch `DATABASE_URL` to the
+  **Transaction pooler** string (port `6543`) for the Vercel env var — but
+  keep using the session-pooler URL for running migrations.
+- If Vercel fails to detect the framework (older accounts), install the
+  preset and redeploy:
+
+  ```bash
+  npm install @vercel/react-router
+  ```
+
+  ```ts
+  // react-router.config.ts
+  import { vercelPreset } from "@vercel/react-router/vite";
+  export default { ssr: true, presets: [vercelPreset()] } satisfies Config;
+  ```
+
 ## Data model
 
 - `Earthquake` — one row per IGN event (`id` is the IGN event code, e.g.
