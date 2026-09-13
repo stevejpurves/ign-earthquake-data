@@ -9,16 +9,19 @@ Postgres via Prisma.
 
 ## How it works
 
-- On page load the app **optimistically renders whatever is already in the
-  database** — no waiting on the upstream feed.
-- If the database hasn't been refreshed in the **last hour**, the page kicks
-  off a background `POST /api/refresh`, which pulls the
-  [IGN últimos terremotos feed](https://www.ign.es/web/en/ign/portal/ultimos-terremotos/-/ultimos-terremotos/)
-  (the same catalog behind the `wms-inspire/geofisica` WMS layers), parses it,
-  and inserts any new events. When it lands, the chart revalidates and picks up
-  the new points.
-- Refreshes are throttled server-side (one per hour, with a concurrency lock)
-  and logged in the `RefreshLog` table; failures degrade gracefully to the
+- Stale-while-revalidate: on page load the app **renders whatever is already
+  in the database immediately** — no waiting on the upstream source.
+- If the last successful refresh is older than **`REFRESH_INTERVAL_MINUTES`
+  (default 5)**, the page kicks off a background `POST /api/refresh`, which
+  queries the [IGN earthquake catalog](https://www.ign.es/web/ign/portal/sis-catalogo-terremotos)
+  for events since the newest stored one (with a one-day overlap) and inserts
+  anything new. When it lands, the chart revalidates and picks up the new
+  points. No cron or scheduler is needed anywhere.
+- The catalog search endpoint returns **all magnitudes** (down to M0.0 and
+  negative) as GeoJSON, unlike the "últimos terremotos" feed, which only
+  lists larger events (roughly M ≥ 1.5). Times are UTC.
+- Refreshes are throttled server-side (interval + a concurrency lock) and
+  logged in the `RefreshLog` table; failures degrade gracefully to the
   stored data.
 - Events are restricted to a window starting **1 Jul 2026** and a bounding box
   around **Tenerife** (island plus nearby offshore, including the Enmedio
@@ -108,11 +111,9 @@ safe — the load skips duplicates.
   **Settings → Functions → Max Duration** to 60 s (or add a `vercel.json`
   with `{"functions": {"**": {"maxDuration": 60}}}`) if your plan defaults
   lower.
-- **Refresh cadence**: refreshes are triggered by page views (throttled to
-  one per hour server-side). With zero traffic the data simply stays put
-  until the next visit — fine for this app. If you ever want unattended
-  updates, add a Vercel Cron job and a `loader` (GET) handler to
-  `app/routes/api.refresh.ts`, since cron invokes with GET.
+- **Refresh cadence**: refreshes are triggered by page views (stale-while-
+  revalidate, throttled to `REFRESH_INTERVAL_MINUTES` server-side). With zero
+  traffic the data simply stays put until the next visit — no cron needed.
 - **Connection pooling**: each serverless instance opens its own small pg
   pool, which the session pooler absorbs at this app's scale. If you ever
   see connection-limit errors under load, switch `DATABASE_URL` to the
@@ -141,13 +142,17 @@ safe — the load skips duplicates.
 
 ## Notes
 
-- The initial load and every refresh request a `dias` window from the feed
-  sized to cover the gap back to the newest stored event (or back to
-  `INITIAL_LOAD_FROM` on an empty database) — the same mechanism the original
-  Python scripts in `../data` used to build multi-month datasets.
+- Data comes from the catalog search's download endpoint
+  (`app/lib/ign.server.ts`): a single stateless **multipart** POST with the
+  bounding box, date range, and `tipoDescarga=geojson` returns every matching
+  event in one response — the same export as the search page's download
+  button (which also offers csv/txt/kmz). No pagination needed (the HTML
+  search results are paginated 50 at a time; the download is not).
+- The initial load and every refresh query from the newest stored event
+  (minus one day of overlap, deduplicated on insert) or from
+  `INITIAL_LOAD_FROM` on an empty database.
 - Events outside the region box or before the window start are dropped at
   insert time, and the loader filters on the same bounds, so changing the
   config narrows the view immediately without a reload of old data.
-- The feed is parsed from the portal's HTML table (`app/lib/ign.server.ts`),
-  with header-based column mapping that tolerates both the English and Spanish
-  variants — covered by `tests/ign-parse.test.ts`.
+- `magType` stores IGN's numeric magnitude-type code from the catalog (e.g.
+  `4` = mbLg); the parsing is covered by `tests/ign-parse.test.ts`.

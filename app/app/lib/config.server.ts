@@ -32,3 +32,15 @@ export const REGION_BBOX: Bbox = (() => {
 })();
 
 export const REGION_NAME = process.env.REGION_NAME ?? "Tenerife";
+
+// Stale-while-revalidate window: page loads render stored data immediately,
+// and kick off a background catalog pull when the last successful refresh is
+// older than this many minutes.
+export const REFRESH_INTERVAL_MINUTES: number = (() => {
+  const raw = process.env.REFRESH_INTERVAL_MINUTES ?? "5";
+  const n = Number.parseFloat(raw);
+  if (!Number.isFinite(n) || n <= 0) {
+    throw new Error(`Invalid REFRESH_INTERVAL_MINUTES: ${raw}`);
+  }
+  return n;
+})();

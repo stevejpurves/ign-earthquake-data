@@ -3,6 +3,7 @@ import { useFetcher, useRevalidator } from "react-router";
 import type { Route } from "./+types/home";
 import {
   INITIAL_LOAD_FROM,
+  REFRESH_INTERVAL_MINUTES,
   REGION_BBOX,
   REGION_NAME,
 } from "../lib/config.server";
@@ -56,6 +57,7 @@ export async function loader(_: Route.LoaderArgs) {
     stale,
     regionName: REGION_NAME,
     fromDate: INITIAL_LOAD_FROM.getTime(),
+    refreshMinutes: REFRESH_INTERVAL_MINUTES,
   };
 }
 
@@ -69,7 +71,8 @@ const RANGES = [
 type RangeKey = (typeof RANGES)[number]["key"];
 
 export default function Home({ loaderData }: Route.ComponentProps) {
-  const { points, lastRefreshedAt, stale, regionName, fromDate } = loaderData;
+  const { points, lastRefreshedAt, stale, regionName, fromDate, refreshMinutes } =
+    loaderData;
   const fetcher = useFetcher<{
     status: "fresh" | "already-running" | "refreshed" | "error";
     eventsUpserted?: number;
@@ -172,11 +175,12 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         Data:{" "}
         <a
           className="underline hover:text-[#52514e] dark:hover:text-[#c3c2b7]"
-          href="https://www.ign.es/web/en/ign/portal/ultimos-terremotos/-/ultimos-terremotos/"
+          href="https://www.ign.es/web/ign/portal/sis-catalogo-terremotos"
         >
-          IGN últimos terremotos
+          IGN earthquake catalog
         </a>{" "}
-        · refreshed automatically when older than one hour.
+        (all magnitudes) · refreshed automatically when older than{" "}
+        {refreshMinutes} min.
       </footer>
     </main>
   );

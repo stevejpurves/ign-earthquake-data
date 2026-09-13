@@ -4,7 +4,7 @@ Earthquake data from Spain's [Instituto Geográfico Nacional (IGN)](https://www.
 
 ## Layout
 
-- [`app/`](app/) — React Router web app: an earthquake timeline visualization for the region around Tenerife (depth vs. time, marker size = magnitude) backed by Postgres + Prisma. Loads events from the IGN feed from 1 Jul 2026 and auto-refreshes in the background. See [`app/README.md`](app/README.md) for setup.
+- [`app/`](app/) — React Router web app: an earthquake timeline visualization for the region around Tenerife (depth vs. time, marker size = magnitude) backed by Postgres + Prisma. Loads all-magnitude events from the IGN earthquake catalog from 1 Jul 2026 and auto-refreshes in the background (stale-while-revalidate). See [`app/README.md`](app/README.md) for setup.
 - [`data/`](data/) — the original data project: CSV/JSON catalog snapshots, Python fetch/update scripts, and analysis notebooks. See [`data/README.md`](data/README.md).
 
 ## Quick start (web app)

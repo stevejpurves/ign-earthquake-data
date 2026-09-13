@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { REGION_BBOX } from "../app/lib/config.server";
 import { inBbox } from "../app/lib/ign.server";
-import { computeFetchDays } from "../app/lib/refresh.server";
+import { computeFetchStart } from "../app/lib/refresh.server";
 
 test("Tenerife bbox keeps island and nearby offshore events", () => {
   // Santa Cruz de Tenerife
@@ -22,23 +22,26 @@ test("Tenerife bbox excludes other islands", () => {
   assert.ok(!inBbox({ latitude: 35.45, longitude: -3.66 }, REGION_BBOX));
 });
 
-test("computeFetchDays covers back to the initial-load date on empty db", () => {
+test("computeFetchStart uses the initial-load date on an empty db", () => {
   // INITIAL_LOAD_FROM defaults to 2026-07-01
-  const now = new Date("2026-08-01T12:00:00Z");
-  const days = computeFetchDays(null, now);
-  assert.ok(days >= 32 && days <= 33, `expected ~32 days, got ${days}`);
+  assert.equal(
+    computeFetchStart(null).toISOString(),
+    "2026-07-01T00:00:00.000Z",
+  );
 });
 
-test("computeFetchDays covers just the gap when recent events exist", () => {
-  const now = new Date("2026-08-01T12:00:00Z");
-  const newest = new Date("2026-07-30T00:00:00Z");
-  const days = computeFetchDays(newest, now);
-  assert.ok(days >= 3 && days <= 4, `expected ~3 days, got ${days}`);
+test("computeFetchStart overlaps one day behind the newest stored event", () => {
+  const newest = new Date("2026-09-10T06:00:00Z");
+  assert.equal(
+    computeFetchStart(newest).toISOString(),
+    "2026-09-09T06:00:00.000Z",
+  );
 });
 
-test("computeFetchDays never reaches before the initial-load date", () => {
-  const now = new Date("2026-08-01T12:00:00Z");
+test("computeFetchStart never reaches before the initial-load date", () => {
   const newest = new Date("2021-12-01T00:00:00Z"); // older than the window start
-  const days = computeFetchDays(newest, now);
-  assert.ok(days <= 33, `expected window capped at initial-load date, got ${days}`);
+  assert.equal(
+    computeFetchStart(newest).toISOString(),
+    "2026-07-01T00:00:00.000Z",
+  );
 });

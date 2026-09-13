@@ -1,8 +1,12 @@
-import { INITIAL_LOAD_FROM, REGION_BBOX } from "./config.server";
+import {
+  INITIAL_LOAD_FROM,
+  REFRESH_INTERVAL_MINUTES,
+  REGION_BBOX,
+} from "./config.server";
 import { prisma } from "./db.server";
-import { fetchIgnEvents, inBbox } from "./ign.server";
+import { fetchCatalogEvents, inBbox } from "./ign.server";
 
-export const REFRESH_INTERVAL_MS = 60 * 60 * 1000; // 1 hour
+export const REFRESH_INTERVAL_MS = REFRESH_INTERVAL_MINUTES * 60 * 1000;
 const RUNNING_TIMEOUT_MS = 5 * 60 * 1000; // consider a "running" refresh stuck after 5 min
 
 export async function getLastSuccessfulRefresh() {
@@ -19,36 +23,37 @@ export async function isStale(): Promise<boolean> {
 }
 
 /**
- * How many feed days to request: enough to cover the gap back to the newest
- * stored event, or all the way back to the initial-load start date when the
- * database is empty (or older than that date).
+ * Where to start the catalog query: one day before the newest stored event
+ * (the catalog filters by whole days, and late-arriving events get inserted
+ * behind the newest timestamp — the overlap is deduplicated on insert), or
+ * the initial-load start date when the database is empty.
  */
-export function computeFetchDays(
-  newest: Date | null,
-  now: Date = new Date(),
-): number {
-  const since = newest && newest > INITIAL_LOAD_FROM ? newest : INITIAL_LOAD_FROM;
-  return Math.ceil((now.getTime() - since.getTime()) / 86_400_000) + 1;
+export function computeFetchStart(newest: Date | null): Date {
+  if (!newest) return INITIAL_LOAD_FROM;
+  const overlap = new Date(newest.getTime() - 86_400_000);
+  return overlap > INITIAL_LOAD_FROM ? overlap : INITIAL_LOAD_FROM;
 }
 
 /**
- * Pull events from the IGN feed into the database, restricted to the
+ * Pull events from the IGN catalog into the database, restricted to the
  * configured region and initial-load window. Shared by the seed script
- * (initial load) and the hourly background refresh.
+ * (initial load) and the background refresh.
  */
 export async function importFromIgn(): Promise<{
   fetched: number;
   inRegion: number;
   upserted: number;
-  days: number;
+  start: Date;
 }> {
   const newest = await prisma.earthquake.findFirst({
     orderBy: { time: "desc" },
     select: { time: true },
   });
-  const days = computeFetchDays(newest?.time ?? null);
+  const start = computeFetchStart(newest?.time ?? null);
 
-  const all = await fetchIgnEvents(days);
+  const all = await fetchCatalogEvents(start, new Date(), REGION_BBOX);
+  // The catalog applies the bbox server-side; re-check locally so a config
+  // change or endpoint quirk can never widen what gets stored.
   const events = all.filter(
     (e) => inBbox(e, REGION_BBOX) && e.time >= INITIAL_LOAD_FROM,
   );
@@ -62,7 +67,7 @@ export async function importFromIgn(): Promise<{
     });
     upserted += res.count;
   }
-  return { fetched: all.length, inRegion: events.length, upserted, days };
+  return { fetched: all.length, inRegion: events.length, upserted, start };
 }
 
 export async function recordRefreshSuccess(
@@ -80,8 +85,8 @@ export async function recordRefreshSuccess(
 }
 
 /**
- * Hourly-throttled background refresh. Returns what happened so the client
- * can decide whether to revalidate.
+ * Stale-while-revalidate refresh, throttled to REFRESH_INTERVAL_MINUTES.
+ * Returns what happened so the client can decide whether to revalidate.
  */
 export async function refreshIfStale(): Promise<
   | { status: "fresh" }
@@ -101,14 +106,14 @@ export async function refreshIfStale(): Promise<
 
   const log = await prisma.refreshLog.create({ data: { status: "running" } });
   try {
-    const { fetched, inRegion, upserted, days } = await importFromIgn();
+    const { fetched, inRegion, upserted, start } = await importFromIgn();
     await prisma.refreshLog.update({
       where: { id: log.id },
       data: {
         status: "success",
         finishedAt: new Date(),
         eventsUpserted: upserted,
-        message: `Fetched ${fetched} events (${days} day window), ${inRegion} in region`,
+        message: `Fetched ${fetched} events since ${start.toISOString().slice(0, 10)}, ${inRegion} in region`,
       },
     });
     return { status: "refreshed", eventsUpserted: upserted };

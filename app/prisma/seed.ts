@@ -18,10 +18,11 @@ async function main() {
     `Initial load from IGN since ${INITIAL_LOAD_FROM.toISOString().slice(0, 10)}, ` +
       `${REGION_NAME} region (lat ${latMin}..${latMax}, lon ${lonMin}..${lonMax})`,
   );
-  const { fetched, inRegion, upserted, days } = await importFromIgn();
-  await recordRefreshSuccess(upserted, `Initial load (${days} day window)`);
+  const { fetched, inRegion, upserted, start } = await importFromIgn();
+  const from = start.toISOString().slice(0, 10);
+  await recordRefreshSuccess(upserted, `Initial load (since ${from})`);
   console.log(
-    `Fetched ${fetched} events over ${days} days; ${inRegion} in region; ${upserted} inserted.`,
+    `Fetched ${fetched} events since ${from}; ${inRegion} in region; ${upserted} inserted.`,
   );
 }
 
